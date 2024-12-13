@@ -13,6 +13,9 @@ class Classes extends Model
 
     protected $table = 'classes';
 
+    public $incrementing = false; // Disable auto-incrementing for the ID
+    protected $keyType = 'string'; // Specify that the ID is a string (UUID)
+
     /**
      * The attributes that are mass assignable.
      */

@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Task extends Model
 {
     use HasFactory;
+
+    public $incrementing = false; // Disable auto-incrementing for the ID
+    protected $keyType = 'string';
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +26,17 @@ class Task extends Model
         'class_id',
         'created_by',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = (string) Str::uuid();
+            }
+        });
+    }
 
     /**
      * Relationships.

@@ -5,11 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class ClassMember extends Model
 {
     use HasFactory;
 
+    public $incrementing = false; // Disable auto-incrementing for the ID
+    protected $keyType = 'string'; // Specify that the ID is a string (UUID)
     protected $table = 'class_members';
 
     /**
@@ -20,6 +23,17 @@ class ClassMember extends Model
         'class_id',
         'student_id',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = (string) Str::uuid();
+            }
+        });
+    }
 
     /**
      * Relationships.
